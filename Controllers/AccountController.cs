@@ -51,7 +51,7 @@ namespace TrafikCezaYonetimApp.Controllers
             var identity = new ClaimsIdentity(claims, "Cookies");
             await HttpContext.SignInAsync("Cookies", new ClaimsPrincipal(identity));
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Vehicle");
         }
 
         [HttpPost]

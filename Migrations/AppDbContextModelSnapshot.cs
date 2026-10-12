@@ -22,6 +22,89 @@ namespace TrafikCezaYonetimApp.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("TrafikCezaYonetimApp.Models.Entities.Penalty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("PenaltyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RejectReason")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("Penalties");
+                });
+
+            modelBuilder.Entity("TrafikCezaYonetimApp.Models.Entities.PenaltyHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActionType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FromStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("PenaltyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ToStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PenaltyId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PenaltyHistories");
+                });
+
             modelBuilder.Entity("TrafikCezaYonetimApp.Models.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -89,6 +172,49 @@ namespace TrafikCezaYonetimApp.Migrations
                         .IsUnique();
 
                     b.ToTable("Vehicles");
+                });
+
+            modelBuilder.Entity("TrafikCezaYonetimApp.Models.Entities.Penalty", b =>
+                {
+                    b.HasOne("TrafikCezaYonetimApp.Models.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TrafikCezaYonetimApp.Models.Entities.Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("TrafikCezaYonetimApp.Models.Entities.PenaltyHistory", b =>
+                {
+                    b.HasOne("TrafikCezaYonetimApp.Models.Entities.Penalty", "Penalty")
+                        .WithMany("History")
+                        .HasForeignKey("PenaltyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TrafikCezaYonetimApp.Models.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Penalty");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TrafikCezaYonetimApp.Models.Entities.Penalty", b =>
+                {
+                    b.Navigation("History");
                 });
 #pragma warning restore 612, 618
         }

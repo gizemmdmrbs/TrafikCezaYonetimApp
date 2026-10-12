@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrafikCezaYonetimApp.Data;
 using TrafikCezaYonetimApp.Models.Entities;
@@ -6,6 +7,7 @@ using TrafikCezaYonetimApp.Models.ViewModels;
 
 namespace TrafikCezaYonetimApp.Controllers
 {
+    [Authorize]
     public class VehicleController : Controller
     {
         private readonly AppDbContext _db;

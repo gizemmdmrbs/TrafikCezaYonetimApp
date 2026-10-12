@@ -1,0 +1,45 @@
+﻿@model TrafikCezaYonetimApp.Models.ViewModels.PenaltyCreateViewModel
+@{
+    ViewData["Title"] = "Yeni Ceza";
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <h3 class="mb-3">Yeni Ceza</h3>
+
+        <form asp-action="Create" method="post">
+            <div class="mb-3">
+                <label asp-for="VehicleId" class="form-label"></label>
+                <select asp-for="VehicleId" class="form-select" asp-items="Model.Vehicles">
+                    <option value="">Seçiniz...</option>
+                </select>
+                <span asp-validation-for="VehicleId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Amount" class="form-label"></label>
+                <input asp-for="Amount" class="form-control" type="number" step="0.01" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PenaltyDate" class="form-label"></label>
+                <input asp-for="PenaltyDate" class="form-control" type="date" />
+                <span asp-validation-for="PenaltyDate" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+            <a asp-action="Index" class="btn btn-secondary">İptal</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
