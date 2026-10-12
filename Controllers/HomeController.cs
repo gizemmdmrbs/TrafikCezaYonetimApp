@@ -1,6 +1,6 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using TrafikCezaYonetimApp.Models;
 
 namespace TrafikCezaYonetimApp.Controllers
@@ -20,15 +20,27 @@ namespace TrafikCezaYonetimApp.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(int? code)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.Message = code switch
+            {
+                404 => "Aradığınız sayfa bulunamadı.",
+                403 => "Bu sayfaya erişim yetkiniz yok.",
+                _ => "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin."
+            };
+
+            if (code is null)
+            {
+                _logger.LogError("Beklenmeyen hata. RequestId: {RequestId}",
+                    Activity.Current?.Id ?? HttpContext.TraceIdentifier);
+            }
+
+            return View(new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            });
         }
     }
 }

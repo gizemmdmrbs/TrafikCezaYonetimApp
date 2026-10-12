@@ -11,10 +11,12 @@ namespace TrafikCezaYonetimApp.Controllers
     public class VehicleController : Controller
     {
         private readonly AppDbContext _db;
+        private readonly ILogger<VehicleController> _logger;
 
-        public VehicleController(AppDbContext db)
+        public VehicleController(AppDbContext db, ILogger<VehicleController> logger)
         {
             _db = db;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
@@ -30,6 +32,7 @@ namespace TrafikCezaYonetimApp.Controllers
         public IActionResult Create() => View(new VehicleCreateViewModel());
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(VehicleCreateViewModel vmmodel)
         {
             if (!ModelState.IsValid)
@@ -51,12 +54,20 @@ namespace TrafikCezaYonetimApp.Controllers
                 Model = vmmodel.Model.Trim()
             });
 
-            await _db.SaveChangesAsync();
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Araç kaydedilemedi. Plaka: {Plate}", plate);
+                ModelState.AddModelError("", "Araç kaydedilirken bir hata oluştu.");
+                return View(vmmodel);
+            }
 
             TempData["Success"] = "Araç eklendi.";
             return RedirectToAction(nameof(Index));
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -66,7 +77,17 @@ namespace TrafikCezaYonetimApp.Controllers
             if (vehicle == null) return NotFound();
 
             _db.Vehicles.Remove(vehicle);
-            await _db.SaveChangesAsync();
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Araç silinemedi. Id: {Id}", id);
+                TempData["Error"] = "Araç silinemedi. Bu araca ait cezalar olabilir.";
+                return RedirectToAction(nameof(Index));
+            }
 
             TempData["Success"] = "Araç silindi.";
             return RedirectToAction(nameof(Index));
@@ -99,7 +120,6 @@ namespace TrafikCezaYonetimApp.Controllers
 
             var plate = vmmodel.Plate.Trim().ToUpperInvariant();
 
-            // Başka bir araçta aynı plaka var mı? (kendisi hariç)
             if (await _db.Vehicles.AnyAsync(v => v.Plate == plate && v.Id != id))
             {
                 ModelState.AddModelError(nameof(vmmodel.Plate), "Bu plaka zaten kayıtlı.");
@@ -108,10 +128,19 @@ namespace TrafikCezaYonetimApp.Controllers
 
             vehicle.Plate = plate;
             vehicle.VehicleType = vmmodel.VehicleType!.Value;
-            vehicle.Brand = vmmodel.Brand;
-            vehicle.Model = vmmodel.Model;
+            vehicle.Brand = vmmodel.Brand.Trim();
+            vehicle.Model = vmmodel.Model.Trim();
 
-            await _db.SaveChangesAsync();
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Araç güncellenemedi. Id: {Id}", id);
+                ModelState.AddModelError("", "Araç güncellenirken bir hata oluştu.");
+                return View(vmmodel);
+            }
 
             TempData["Success"] = "Araç güncellendi.";
             return RedirectToAction(nameof(Index));

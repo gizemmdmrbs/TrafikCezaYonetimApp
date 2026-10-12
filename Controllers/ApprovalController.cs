@@ -12,10 +12,12 @@ namespace TrafikCezaYonetimApp.Controllers;
 public class ApprovalController : Controller
 {
     private readonly AppDbContext _db;
+    private readonly ILogger<ApprovalController> _logger;
 
-    public ApprovalController(AppDbContext db)
+    public ApprovalController(AppDbContext db, ILogger<ApprovalController> logger)
     {
         _db = db;
+        _logger = logger;
     }
 
     public async Task<IActionResult> Index()
@@ -62,7 +64,16 @@ public class ApprovalController : Controller
             Note = "Onaylandı."
         });
 
-        await _db.SaveChangesAsync();
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            _logger.LogError(ex, "Ceza onaylanamadı. Id: {Id}", id);
+            TempData["Error"] = "Ceza onaylanırken bir hata oluştu.";
+            return RedirectToAction(nameof(Index));
+        }
 
         TempData["Success"] = "Ceza onaylandı.";
         return RedirectToAction(nameof(Index));
@@ -114,24 +125,3 @@ public class ApprovalController : Controller
         _db.PenaltyHistories.Add(new PenaltyHistory
         {
             PenaltyId = penalty.Id,
-            UserId = GetUserId(),
-            ActionType = PenaltyActionType.Reddedildi,
-            FromStatus = from,
-            ToStatus = PenaltyStatus.Reddedildi,
-            Note = reason
-        });
-
-        await _db.SaveChangesAsync();
-
-        TempData["Success"] = "Ceza reddedildi.";
-        return RedirectToAction(nameof(Index));
-    }
-
-    private int GetUserId() =>
-        int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
-    private PenaltyStatus GetMyStage() =>
-        User.IsInRole("Yonetici")
-            ? PenaltyStatus.YoneticiOnayi
-            : PenaltyStatus.FinansOnayi;
-}

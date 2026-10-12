@@ -13,10 +13,12 @@ namespace TrafikCezaYonetimApp.Controllers;
 public class PenaltyController : Controller
 {
     private readonly AppDbContext _db;
+    private readonly ILogger<PenaltyController> _logger;
 
-    public PenaltyController(AppDbContext db)
+    public PenaltyController(AppDbContext db, ILogger<PenaltyController> logger)
     {
         _db = db;
+        _logger = logger;
     }
 
     public async Task<IActionResult> Index()
@@ -37,6 +39,7 @@ public class PenaltyController : Controller
 
         return View(penalties);
     }
+
     public async Task<IActionResult> Details(int id)
     {
         var penalty = await _db.Penalties
@@ -47,15 +50,15 @@ public class PenaltyController : Controller
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (penalty == null) return NotFound();
+
         if (User.IsInRole("Finans") &&
-        !penalty.History.Any(h => h.ToStatus == PenaltyStatus.FinansOnayi))
-            {
-                return NotFound();
-            }
+            !penalty.History.Any(h => h.ToStatus == PenaltyStatus.FinansOnayi))
+        {
+            return NotFound();
+        }
 
         return View(penalty);
     }
-    
 
     [Authorize(Roles = "Personel")]
     [HttpGet]
@@ -99,7 +102,18 @@ public class PenaltyController : Controller
         });
 
         _db.Penalties.Add(penalty);
-        await _db.SaveChangesAsync();
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            _logger.LogError(ex, "Ceza kaydedilemedi.");
+            ModelState.AddModelError("", "Ceza kaydedilirken bir hata oluştu.");
+            await FillVehiclesAsync(vm);
+            return View(vm);
+        }
 
         TempData["Success"] = "Ceza kaydedildi ve yönetici onayına gönderildi.";
         return RedirectToAction(nameof(Index));
@@ -166,49 +180,20 @@ public class PenaltyController : Controller
             Note = "Ceza bilgileri güncellendi."
         });
 
-        await _db.SaveChangesAsync();
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            _logger.LogError(ex, "Ceza güncellenemedi. Id: {Id}", vm.Id);
+            ModelState.AddModelError("", "Ceza güncellenirken bir hata oluştu.");
+            await FillVehiclesAsync(vm);
+            return View(vm);
+        }
 
         TempData["Success"] = "Ceza güncellendi.";
         return RedirectToAction(nameof(Index));
     }
 
     [Authorize(Roles = "Personel")]
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var penalty = await _db.Penalties.FindAsync(id);
-        if (penalty == null) return NotFound();
-
-        if (!CanModify(penalty))
-        {
-            TempData["Error"] = "Bu ceza artık silinemez.";
-            return RedirectToAction(nameof(Index));
-        }
-
-        _db.Penalties.Remove(penalty);
-        await _db.SaveChangesAsync();
-
-        TempData["Success"] = "Ceza silindi.";
-        return RedirectToAction(nameof(Index));
-    }
-
-    private int GetUserId() =>
-        int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
-    private bool CanModify(Penalty penalty) =>
-        penalty.CreatedByUserId == GetUserId() &&
-        penalty.Status == PenaltyStatus.YoneticiOnayi;
-
-    private async Task FillVehiclesAsync(PenaltyCreateViewModel vm)
-    {
-        vm.Vehicles = await _db.Vehicles
-            .OrderBy(v => v.Plate)
-            .Select(v => new SelectListItem
-            {
-                Value = v.Id.ToString(),
-                Text = v.Plate + " - " + v.Brand + " " + v.Model
-            })
-            .ToListAsync();
-    }
-}
