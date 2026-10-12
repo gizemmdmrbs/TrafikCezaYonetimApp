@@ -1,31 +1,97 @@
-﻿
-@model TrafikCezaYonetimApp.Models.ViewModels.LoginViewModel
-
+﻿@model TrafikCezaYonetimApp.Models.ViewModels.LoginViewModel
 @{
     ViewData["Title"] = "Giriş";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-4">
-        <h3 class="mb-3">Giriş Yap</h3>
+<style>
+    .login-wrapper {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-        <form asp-action="Login" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    .login-card {
+        width: 100%;
+        max-width: 400px;
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(13, 71, 161, 0.15);
+        overflow: hidden;
+    }
 
-            <div class="mb-3">
-                <label asp-for="UserName" class="form-label">Kullanıcı Adı</label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
+    .login-header {
+        background: linear-gradient(90deg, #0d47a1, #1976d2);
+        color: #ffffff;
+        text-align: center;
+        padding: 28px 20px;
+    }
 
-            <div class="mb-3">
-                <label asp-for="Password" class="form-label">Şifre</label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
+    .login-header h4 {
+        margin: 0;
+        font-weight: 600;
+    }
 
-            <button type="submit" class="btn btn-primary w-100">Giriş</button>
-        </form>
+    .login-header small {
+        opacity: 0.85;
+    }
+
+    .login-body {
+        padding: 28px;
+        background: #ffffff;
+    }
+
+    .login-body .form-control {
+        border-radius: 8px;
+        padding: 10px 12px;
+    }
+
+    .login-body .form-control:focus {
+        border-color: #1976d2;
+        box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.2);
+    }
+
+    .login-btn {
+        background: linear-gradient(90deg, #0d47a1, #1976d2);
+        border: none;
+        border-radius: 8px;
+        padding: 10px;
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+    .login-btn:hover {
+        color: #ffffff;
+        opacity: 0.92;
+    }
+</style>
+
+<div class="login-wrapper">
+    <div class="card login-card">
+        <div class="login-header">
+            <h4>Trafik Ceza Yönetimi</h4>
+            <small>Devam etmek için giriş yapın</small>
+        </div>
+
+        <div class="login-body">
+            <form asp-action="Login" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+
+                <div class="mb-3">
+                    <label asp-for="UserName" class="form-label">Kullanıcı Adı</label>
+                    <input asp-for="UserName" class="form-control" placeholder="Kullanıcı adınızı girin" autofocus />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Password" class="form-label">Şifre</label>
+                    <input asp-for="Password" class="form-control" placeholder="Şifrenizi girin" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn login-btn w-100">Giriş Yap</button>
+            </form>
+        </div>
     </div>
 </div>
 
