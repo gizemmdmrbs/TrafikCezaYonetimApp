@@ -21,9 +21,17 @@ public class PenaltyController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var penalties = await _db.Penalties
+        IQueryable<Penalty> query = _db.Penalties
             .Include(p => p.Vehicle)
-            .Include(p => p.CreatedByUser)
+            .Include(p => p.CreatedByUser);
+
+        if (User.IsInRole("Finans"))
+        {
+            query = query.Where(p =>
+                p.History.Any(h => h.ToStatus == PenaltyStatus.FinansOnayi));
+        }
+
+        var penalties = await query
             .OrderByDescending(p => p.CreatedAt)
             .ToListAsync();
 
@@ -39,9 +47,15 @@ public class PenaltyController : Controller
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (penalty == null) return NotFound();
+        if (User.IsInRole("Finans") &&
+        !penalty.History.Any(h => h.ToStatus == PenaltyStatus.FinansOnayi))
+            {
+                return NotFound();
+            }
 
         return View(penalty);
     }
+    
 
     [Authorize(Roles = "Personel")]
     [HttpGet]
