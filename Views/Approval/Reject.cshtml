@@ -1,0 +1,28 @@
+﻿@model TrafikCezaYonetimApp.Models.ViewModels.PenaltyRejectViewModel
+@{
+    ViewData["Title"] = "Ceza Reddet";
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <h3 class="mb-3">Ceza Reddet</h3>
+        <p class="text-muted">@ViewBag.Info</p>
+
+        <form asp-action="Reject" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label asp-for="Reason" class="form-label"></label>
+                <textarea asp-for="Reason" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Reason" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-danger">Reddet</button>
+            <a asp-action="Index" class="btn btn-secondary">İptal</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

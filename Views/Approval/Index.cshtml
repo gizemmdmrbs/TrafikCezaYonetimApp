@@ -1,0 +1,52 @@
+﻿@model List<TrafikCezaYonetimApp.Models.Entities.Penalty>
+@{
+    ViewData["Title"] = "Onay Bekleyenler";
+}
+
+<h3 class="mb-3">Onay Bekleyenler</h3>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Plaka</th>
+            <th>Açıklama</th>
+            <th>Tutar</th>
+            <th>Ceza Tarihi</th>
+            <th>Giren</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Vehicle.Plate</td>
+                <td>@p.Description</td>
+                <td>@p.Amount.ToString("N2") TL</td>
+                <td>@p.PenaltyDate.ToString("dd.MM.yyyy")</td>
+                <td>@p.CreatedByUser.UserName</td>
+                <td class="text-end">
+                    <form asp-action="Approve" asp-route-id="@p.Id" method="post" class="d-inline"
+                          onsubmit="return confirm('Bu ceza onaylansın mı?');">
+                        <button type="submit" class="btn btn-sm btn-success">Onayla</button>
+                    </form>
+                    <a asp-action="Reject" asp-route-id="@p.Id" class="btn btn-sm btn-outline-danger">Reddet</a>
+                </td>
+            </tr>
+        }
+        @if (!Model.Any())
+        {
+            <tr><td colspan="6" class="text-center text-muted">Onay bekleyen ceza yok.</td></tr>
+        }
+    </tbody>
+</table>

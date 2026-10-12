@@ -21,28 +21,28 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @if (User.Identity?.IsAuthenticated == true)
                         {
-                         <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Vehicle" asp-action="Index">Araçlar</a>
-                             </li>
-                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Penalty" asp-action="Index">Cezalar</a>
-                             </li>
-                         </ul>
-                        }
-                    @if (User.Identity?.IsAuthenticated == true)
-                    {
-                        <div class="d-flex align-items-center">
-                            <span class="me-3">@User.Identity.Name (@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value)</span>
-                            <form asp-controller="Account" asp-action="Logout" method="post">
-                                <button type="submit" class="btn btn-outline-secondary btn-sm">Çıkış</button>
-                            </form>
-                        </div>
-                    }
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Vehicle" asp-action="Index">Araçlar</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Penalty" asp-action="Index">Cezalar</a>
+                                </li>
+                                @if (User.IsInRole("Yonetici") || User.IsInRole("Finans"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-controller="Approval" asp-action="Index">Onay Bekleyenler</a>
+                                    </li>
+                                }
+                            </ul>
 
+                            <div class="d-flex align-items-center">
+                                <span class="me-3">@User.Identity.Name (@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value)</span>
+                                <form asp-controller="Account" asp-action="Logout" method="post">
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm">Çıkış</button>
+                                </form>
+                            </div>
+                        }
                 </div>
             </div>
         </nav>
@@ -55,7 +55,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - TrafikCezaYonetimApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2026 - TrafikCezaYonetimApp
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
