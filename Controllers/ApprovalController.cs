@@ -125,3 +125,33 @@ public class ApprovalController : Controller
         _db.PenaltyHistories.Add(new PenaltyHistory
         {
             PenaltyId = penalty.Id,
+            UserId = GetUserId(),
+            ActionType = PenaltyActionType.Reddedildi,
+            FromStatus = from,
+            ToStatus = PenaltyStatus.Reddedildi,
+            Note = reason
+        });
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            _logger.LogError(ex, "Ceza reddedilemedi. Id: {Id}", vm.Id);
+            TempData["Error"] = "Ceza reddedilirken bir hata oluştu.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        TempData["Success"] = "Ceza reddedildi.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    private int GetUserId() =>
+        int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+    private PenaltyStatus GetMyStage() =>
+        User.IsInRole("Yonetici")
+            ? PenaltyStatus.YoneticiOnayi
+            : PenaltyStatus.FinansOnayi;
+}
