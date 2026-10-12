@@ -1,6 +1,8 @@
-﻿@model List<TrafikCezaYonetimApp.Models.Entities.Penalty>
+﻿@using TrafikCezaYonetimApp.Models.Entities
+@model List<TrafikCezaYonetimApp.Models.Entities.Penalty>
 @{
     ViewData["Title"] = "Cezalar";
+    var currentUserId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -16,6 +18,11 @@
     <div class="alert alert-success">@TempData["Success"]</div>
 }
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -25,6 +32,7 @@
             <th>Ceza Tarihi</th>
             <th>Durum</th>
             <th>Giren</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -37,11 +45,21 @@
                 <td>@p.PenaltyDate.ToString("dd.MM.yyyy")</td>
                 <td>@Html.DisplayFor(m => p.Status)</td>
                 <td>@p.CreatedByUser.UserName</td>
+                <td class="text-end">
+                    @if (User.IsInRole("Personel") && p.CreatedByUserId == currentUserId && p.Status == PenaltyStatus.YoneticiOnayi)
+                    {
+                        <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
+                        <form asp-action="Delete" asp-route-id="@p.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('Bu ceza silinsin mi?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Sil</button>
+                        </form>
+                    }
+                </td>
             </tr>
         }
         @if (!Model.Any())
         {
-            <tr><td colspan="6" class="text-center text-muted">Kayıtlı ceza yok.</td></tr>
+            <tr><td colspan="7" class="text-center text-muted">Kayıtlı ceza yok.</td></tr>
         }
     </tbody>
 </table>

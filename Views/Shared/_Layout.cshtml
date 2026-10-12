@@ -32,12 +32,6 @@
                                 <a class="nav-link text-dark" asp-controller="Penalty" asp-action="Index">Cezalar</a>
                              </li>
                          </ul>
-                         <div class="d-flex align-items-center">
-                             <span class="me-3">@User.Identity.Name (@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value)</span>
-                              <form asp-controller="Account" asp-action="Logout" method="post">
-                                <button type="submit" class="btn btn-outline-secondary btn-sm">Çıkış</button>
-                              </form>
-                         </div>
                         }
                     @if (User.Identity?.IsAuthenticated == true)
                     {

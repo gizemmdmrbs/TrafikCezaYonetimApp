@@ -11,5 +11,7 @@ public enum PenaltyActionType
     Onaylandi = 2,
 
     [Display(Name = "Reddedildi")]
-    Reddedildi =3
+    Reddedildi =3,
+    [Display(Name = "Güncellendi")]
+    Guncellendi = 4
 }
