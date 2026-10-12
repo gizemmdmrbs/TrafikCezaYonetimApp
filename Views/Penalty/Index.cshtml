@@ -46,6 +46,7 @@
                 <td>@Html.DisplayFor(m => p.Status)</td>
                 <td>@p.CreatedByUser.UserName</td>
                 <td class="text-end">
+                    <a asp-action="Details" asp-route-id="@p.Id" class="btn btn-sm btn-outline-secondary">Geçmiş</a>
                     @if (User.IsInRole("Personel") && p.CreatedByUserId == currentUserId && p.Status == PenaltyStatus.YoneticiOnayi)
                     {
                         <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>

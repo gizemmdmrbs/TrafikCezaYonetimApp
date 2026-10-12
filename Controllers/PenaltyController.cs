@@ -29,6 +29,19 @@ public class PenaltyController : Controller
 
         return View(penalties);
     }
+    public async Task<IActionResult> Details(int id)
+    {
+        var penalty = await _db.Penalties
+            .Include(p => p.Vehicle)
+            .Include(p => p.CreatedByUser)
+            .Include(p => p.History)
+                .ThenInclude(h => h.User)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        if (penalty == null) return NotFound();
+
+        return View(penalty);
+    }
 
     [Authorize(Roles = "Personel")]
     [HttpGet]

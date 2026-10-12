@@ -1,0 +1,88 @@
+﻿@using TrafikCezaYonetimApp.Models.Entities
+@model TrafikCezaYonetimApp.Models.Entities.Penalty
+@{
+    ViewData["Title"] = "Ceza Detayı";
+
+    string StatusBadge(PenaltyStatus s) => s switch
+    {
+        PenaltyStatus.Tamamlandi => "bg-success",
+        PenaltyStatus.Reddedildi => "bg-danger",
+        PenaltyStatus.FinansOnayi => "bg-info text-dark",
+        _ => "bg-warning text-dark"
+    };
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Ceza Detayı</h3>
+    <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 mb-2">
+                <div class="text-muted small">Plaka</div>
+                <div>@Model.Vehicle.Plate (@Model.Vehicle.Brand @Model.Vehicle.Model)</div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="text-muted small">Tutar</div>
+                <div>@Model.Amount.ToString("N2") TL</div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="text-muted small">Ceza Tarihi</div>
+                <div>@Model.PenaltyDate.ToString("dd.MM.yyyy")</div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="text-muted small">Giren</div>
+                <div>@Model.CreatedByUser.UserName</div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="text-muted small">Durum</div>
+                <span class="badge @StatusBadge(Model.Status)">@Html.DisplayFor(m => m.Status)</span>
+            </div>
+            <div class="col-12 mt-2">
+                <div class="text-muted small">Açıklama</div>
+                <div>@Model.Description</div>
+            </div>
+        </div>
+
+        @if (Model.Status == PenaltyStatus.Reddedildi && !string.IsNullOrEmpty(Model.RejectReason))
+        {
+            <div class="alert alert-danger mt-3 mb-0">
+                <strong>Ret nedeni:</strong> @Model.RejectReason
+            </div>
+        }
+    </div>
+</div>
+
+<h5 class="mb-3">Onay Geçmişi</h5>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Tarih</th>
+            <th>Kullanıcı</th>
+            <th>İşlem</th>
+            <th>Önceki Durum</th>
+            <th>Yeni Durum</th>
+            <th>Açıklama</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var h in Model.History.OrderBy(x => x.CreatedAt))
+        {
+            <tr>
+                <td>@h.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@h.User.UserName</td>
+                <td>@Html.DisplayFor(m => h.ActionType)</td>
+                <td>@Html.DisplayFor(m => h.FromStatus)</td>
+                <td>@Html.DisplayFor(m => h.ToStatus)</td>
+                <td>@h.Note</td>
+            </tr>
+        }
+        @if (!Model.History.Any())
+        {
+            <tr><td colspan="6" class="text-center text-muted">Kayıtlı işlem yok.</td></tr>
+        }
+    </tbody>
+</table>
