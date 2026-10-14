@@ -1,12 +1,11 @@
 ﻿@model List<TrafikCezaYonetimApp.Models.Entities.Vehicle>
-
 @{
-     ViewData["Title"] = "Araçlar";
+    ViewData["Title"] = "Araçlar";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>Araçlar</h3>
-    <a asp-action="Create" class="btn btn-primary">Yeni Araç</a>
+<div class="page-header">
+    <h3 class="page-title">Araçlar</h3>
+    <a asp-action="Create" class="btn btn-primary">+ Yeni Araç</a>
 </div>
 
 @if (TempData["Success"] != null)
@@ -14,39 +13,45 @@
     <div class="alert alert-success">@TempData["Success"]</div>
 }
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Plaka</th>
-            <th>Araç Tipi</th>
-            <th>Marka</th>
-            <th>Model</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var v in Model)
-        {
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="card-table">
+    <table class="table table-hover align-middle">
+        <thead>
             <tr>
-                <td>@v.Plate</td>
-                <td>@Html.DisplayFor(m => v.VehicleType)</td>
-                <td>@v.Brand</td>
-                <td>@v.Model</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@v.Id" class="btn btn-sm btn-warning">Düzenle</a>
-
-                    <form asp-action="Delete" asp-route-id="@v.Id" method="post" class="d-inline"
-                          onsubmit="return confirm('Bu aracı silmek istediğine emin misin?');">
-                        <button type="submit" class="btn btn-sm btn-danger">Sil</button>
-                    </form>
-                </td>
+                <th>Plaka</th>
+                <th>Araç Tipi</th>
+                <th>Marka</th>
+                <th>Model</th>
+                <th></th>
             </tr>
-        }
-        @if (!Model.Any())
-        {
-            <tr><td colspan="4" class="text-center text-muted">Kayıtlı araç yok.</td></tr>
-        }
-
-    </tbody>
-
-</table>
+        </thead>
+        <tbody>
+            @foreach (var v in Model)
+            {
+                <tr>
+                    <td><strong>@v.Plate</strong></td>
+                    <td><span class="badge rounded-pill bg-light text-dark border">@Html.DisplayFor(m => v.VehicleType)</span></td>
+                    <td>@v.Brand</td>
+                    <td>@v.Model</td>
+                    <td class="text-end text-nowrap">
+                        <a asp-action="Edit" asp-route-id="@v.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
+                        <form asp-action="Delete" asp-route-id="@v.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('Bu araç silinsin mi?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Sil</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-5">Kayıtlı araç yok.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

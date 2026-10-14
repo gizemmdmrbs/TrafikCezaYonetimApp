@@ -3,23 +3,28 @@
     ViewData["Title"] = "Ceza Reddet";
 }
 
+<div class="page-header">
+    <h3 class="page-title">Ceza Reddet</h3>
+</div>
+
 <div class="row">
-    <div class="col-md-5">
-        <h3 class="mb-3">Ceza Reddet</h3>
-        <p class="text-muted">@ViewBag.Info</p>
+    <div class="col-lg-6">
+        <div class="form-card">
+            <div class="alert alert-secondary">@ViewBag.Info</div>
 
-        <form asp-action="Reject" method="post">
-            <input type="hidden" asp-for="Id" />
+            <form asp-action="Reject" method="post">
+                <input type="hidden" asp-for="Id" />
 
-            <div class="mb-3">
-                <label asp-for="Reason" class="form-label"></label>
-                <textarea asp-for="Reason" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="Reason" class="text-danger"></span>
-            </div>
+                <div class="mb-3">
+                    <label asp-for="Reason" class="form-label"></label>
+                    <textarea asp-for="Reason" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Reason" class="text-danger"></span>
+                </div>
 
-            <button type="submit" class="btn btn-danger">Reddet</button>
-            <a asp-action="Index" class="btn btn-secondary">İptal</a>
-        </form>
+                <button type="submit" class="btn btn-danger">Reddet</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">İptal</a>
+            </form>
+        </div>
     </div>
 </div>
 

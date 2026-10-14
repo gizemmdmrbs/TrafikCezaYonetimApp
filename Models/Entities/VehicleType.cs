@@ -7,13 +7,13 @@ namespace TrafikCezaYonetimApp.Models.Entities
         [Display(Name = "Binek")]
         Binek = 1,
 
-    [Display(Name = "Çekici")]
+        [Display(Name = "Çekici")]
         Cekici = 2,
 
-    [Display(Name = "Dorse")]
+        [Display(Name = "Dorse")]
         Dorse = 3,
 
-    [Display(Name = "Kiralık Araç")]
+        [Display(Name = "Kiralık Araç")]
         KiralikArac = 4
     }
 }

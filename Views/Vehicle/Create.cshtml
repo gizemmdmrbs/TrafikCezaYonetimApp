@@ -1,48 +1,50 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model TrafikCezaYonetimApp.Models.ViewModels.VehicleCreateViewModel
-
+﻿@model TrafikCezaYonetimApp.Models.ViewModels.VehicleCreateViewModel
 @{
-     ViewData["Title"] = "Yeni Araç";
+    ViewData["Title"] = "Yeni Araç";
 }
 
+<div class="page-header">
+    <h3 class="page-title">Yeni Araç</h3>
+</div>
+
 <div class="row">
-    <div class="col-md-5">
-        <h3 class="mb-3">Yeni Araç</h3>
+    <div class="col-lg-6">
+        <div class="form-card">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-        <form asp-action="Create" method="post">
-            <div class="mb-3">
-                <label asp-for="Plate" class="form-label"></label>
-                <input asp-for="Plate" class="form-control"/>
-                <span asp-validation-for="Plate" class="text-danger"></span>
-            </div>
+                <div class="mb-3">
+                    <label asp-for="Plate" class="form-label"></label>
+                    <input asp-for="Plate" class="form-control" />
+                    <span asp-validation-for="Plate" class="text-danger"></span>
+                </div>
 
-            <div class="mb-3">
-                <label asp-for="VehicleType" class="form-label"></label>
-                <select asp-for="VehicleType" class="form-select" id="VehicleType" name="VehicleType"
-                        asp-items="Html.GetEnumSelectList<TrafikCezaYonetimApp.Models.Entities.VehicleType>()">
-                    <option value="">Seçiniz...</option>
-                </select>
-                <span asp-validation-for="VehicleType" class="text-danger"></span>
-            </div>
+                <div class="mb-3">
+                    <label asp-for="VehicleType" class="form-label"></label>
+                    <select asp-for="VehicleType" class="form-select"
+                            asp-items="Html.GetEnumSelectList<TrafikCezaYonetimApp.Models.Entities.VehicleType>()">
+                        <option value="">Seçiniz...</option>
+                    </select>
+                    <span asp-validation-for="VehicleType" class="text-danger"></span>
+                </div>
 
-            <div class="mb-3">
-                <label asp-for="Brand" class="form-label"></label>
-                <input asp-for="Brand" class="form-control" id="Brand" name="Brand" />
-                <span asp-validation-for="Brand" class="text-danger"></span>
-            </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Brand" class="form-label"></label>
+                        <input asp-for="Brand" class="form-control" />
+                        <span asp-validation-for="Brand" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Model" class="form-label"></label>
+                        <input asp-for="Model" class="form-control" />
+                        <span asp-validation-for="Model" class="text-danger"></span>
+                    </div>
+                </div>
 
-            <div class="mb-3">
-                <label asp-for="Model" class="form-label"></label>
-                <input asp-for="Model" class="form-control" id="Model" name="Model"/>
-                <span asp-validation-for="Model" class="text-danger"></span>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Kaydet</button>
-
-            <a asp-action="Index" class="btn btn-secondary">İptal</a>
-        </form>
+                <button type="submit" class="btn btn-primary">Kaydet</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">İptal</a>
+            </form>
+        </div>
     </div>
 </div>
 

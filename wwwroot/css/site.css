@@ -1,31 +1,170 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #f4f7fb;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+    color: var(--bs-secondary-color);
+    text-align: end;
 }
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+    text-align: start;
 }
+
+/* Sayfa başlığı */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.page-title {
+    margin: 0;
+    font-weight: 600;
+    color: #0d47a1;
+    padding-left: 12px;
+    border-left: 5px solid #1976d2;
+}
+
+/* Tablo kartı */
+.card-table {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(13, 71, 161, 0.08);
+    overflow: hidden;
+}
+
+    .card-table .table {
+        margin-bottom: 0;
+    }
+
+        .card-table .table thead th {
+            background-color: #e8f0fb;
+            color: #0d47a1;
+            font-weight: 600;
+            border-bottom: none;
+            padding: 14px 12px;
+        }
+
+        .card-table .table td {
+            padding: 12px;
+            vertical-align: middle;
+        }
+
+/* Form kartı */
+.form-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(13, 71, 161, 0.08);
+    padding: 28px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 8px;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #1976d2;
+        box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.2);
+    }
+
+/* Butonlar */
+.btn {
+    border-radius: 8px;
+}
+
+.btn-primary {
+    background-color: #1976d2;
+    border-color: #1976d2;
+}
+
+    .btn-primary:hover {
+        background-color: #0d47a1;
+        border-color: #0d47a1;
+    }
+
+/* Uyarı kutuları */
+.alert {
+    border: none;
+    border-radius: 10px;
+}
+
+/* Durum rozeti */
+.status-badge {
+    font-weight: 500;
+    padding: 6px 12px;
+}
+
+/* Bilgi alanları (detay sayfası) */
+.info-label {
+    color: #6b7a90;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-weight: 500;
+}
+
+/* Ana sayfa */
+.home-hero {
+    background: linear-gradient(90deg, #0d47a1, #1976d2);
+    color: #ffffff;
+    border-radius: 14px;
+    padding: 32px;
+    margin-bottom: 24px;
+}
+
+.home-card {
+    display: block;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(13, 71, 161, 0.08);
+    padding: 24px;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+    border-top: 4px solid #1976d2;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+    .home-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 22px rgba(13, 71, 161, 0.15);
+        color: inherit;
+    }
+
+    .home-card h5 {
+        color: #0d47a1;
+        font-weight: 600;
+    }

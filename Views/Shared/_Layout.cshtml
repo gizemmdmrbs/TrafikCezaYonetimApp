@@ -68,7 +68,7 @@
                         </ul>
 
                         <div class="d-flex align-items-center">
-                            <span class="text-white me-3">@User.Identity.Name (@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value)</span>
+                            <span class="text-white me-3">Kullanıcı Adı : @User.Identity.Name (@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value)</span>
                             <form asp-controller="Account" asp-action="Logout" method="post">
                                 <button type="submit" class="btn btn-outline-light btn-sm">Çıkış</button>
                             </form>
