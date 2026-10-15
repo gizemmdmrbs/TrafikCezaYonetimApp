@@ -30,6 +30,6 @@ dotnet run
 5. Terminalde belirtilen yerel adres üzerinden uygulamaya erişin.
 6. Varsayılan oalrak üç kullanıcı tanımlanmıştır kullanıcı rolleri,kullanıcı adları ve şifreleri aşağıdaki gibidir:
 
-Kullanıcı Rolü : Personel , Kullanıcı Adı: personel, Şifre: Test123!
-Kullanıcı Rolü : Yonetici , Kullanıcı Adı: yonetici, Şifre: Test123!
-Kullanıcı Rolü : Finans   , Kullanıcı Adı: finans,   Şifre: Test123!
+Kullanıcı Rolü : Personel , Kullanıcı Adı: personel , Şifre: Test123!
+Kullanıcı Rolü : Yonetici , Kullanıcı Adı: yonetici , Şifre: Test123!
+Kullanıcı Rolü : Finans   , Kullanıcı Adı: finans   , Şifre: Test123!
