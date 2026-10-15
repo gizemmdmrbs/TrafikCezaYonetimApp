@@ -16,7 +16,7 @@ namespace TrafikCezaYonetimApp.Data
             new User { UserName = "personel", Role = Role.Personel },
             new User { UserName = "yonetici", Role = Role.Yonetici },
             new User { UserName = "finans",   Role = Role.Finans }
-        };
+            };
 
             foreach (var u in users)
                 u.PasswordHash = hasher.HashPassword(u, "Test123!");

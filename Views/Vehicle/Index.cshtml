@@ -26,7 +26,8 @@
                 <th>Araç Tipi</th>
                 <th>Marka</th>
                 <th>Model</th>
-                <th></th>
+                <th>Düzenle</th>
+                <th>Sil</th>
             </tr>
         </thead>
         <tbody>
@@ -37,8 +38,8 @@
                     <td><span class="badge rounded-pill bg-light text-dark border">@Html.DisplayFor(m => v.VehicleType)</span></td>
                     <td>@v.Brand</td>
                     <td>@v.Model</td>
-                    <td class="text-end text-nowrap">
-                        <a asp-action="Edit" asp-route-id="@v.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
+                    <td><a asp-action="Edit" asp-route-id="@v.Id" class="btn btn-sm btn-outline-primary">Düzenle</a></td>
+                    <td>
                         <form asp-action="Delete" asp-route-id="@v.Id" method="post" class="d-inline"
                               onsubmit="return confirm('Bu araç silinsin mi?');">
                             <button type="submit" class="btn btn-sm btn-outline-danger">Sil</button>
